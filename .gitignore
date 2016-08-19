@@ -1,0 +1,5 @@
+lib
+log/*
+log4j.properties
+*.jar
+*.nt
