@@ -6,7 +6,61 @@
 @prefix dc:   <http://purl.org/dc/terms/> .
 @prefix erop: <http://bio2rdf.org/erop:> .
 @prefix voc:  <http://bio2rdf.org/erop_vocabulary:> .
+@prefix res:  <http://bio2rdf.org/erop_resource:> .
 @prefix b2v:  <http://bio2rdf.org/bio2rdf_vocabulary:> .
+
+## Por alguna razon esto no funciona.
+#<#dates> rr:sqlQuery """
+#  SELECT STR_TO_DATE(date_____k, '%d.%m.%Y') as date,
+#         STR_TO_DATE(date_m___k, '%d.%m.%Y') as mdate,
+#         erop_nmb_k
+#  FROM erop;
+#""".
+
+# Query para obtener
+<#source_view> rr:sqlQuery """
+  SELECT erop_nmb_k,
+         substring_index(substring_index(all_kar__k,')',1), '(', -1) as karyote,
+         substring_index(substring_index(substring_index(
+                all_kar__k, ', ', -1),')',1),'(',-1) as karyote2,
+         substring_index(substring_index(all_kgd__k,')',1), '(', -1) as kgd,
+         substring_index(substring_index(substring_index(
+                all_kgd__k, ')', 2), '(', -1), ')', 1) as kgd2,
+         substring_index(substring_index(substring_index(
+                all_kgd__k, ')', 3), '(', -1), ')', 1) as kgd3,
+         substring_index(substring_index(all_phyl_k,')',1), '(', -1) as phyl1,
+         substring_index(substring_index(substring_index(
+                all_phyl_k, ')', 2), '(', -1), ')', 1) as phyl2,
+         substring_index(substring_index(substring_index(
+                all_phyl_k, ')', 3), '(', -1), ')', 1) as phyl3,
+         substring_index(substring_index(all_b_cl_k,')',1), '(', -1) as class1,
+         substring_index(substring_index(substring_index(
+                all_b_cl_k, ')', 2), '(', -1), ')', 1) as class2,
+         substring_index(substring_index(substring_index(
+                all_b_cl_k, ')', 3), '(', -1), ')', 1) as class3,
+         substring_index(substring_index(substring_index(
+                all_b_cl_k, ')', 4), '(', -1), ')', 1) as class4,
+         substring_index(substring_index(substring_index(
+                all_b_cl_k, ')', 5), '(', -1), ')', 1) as class5,
+         substring_index(substring_index(substring_index(
+                all_b_cl_k, ')', 6), '(', -1), ')', 1) as class6
+  FROM erop;
+""" .
+
+<#references> rr:sqlQuery """
+  SELECT seq_refa_v, seq_reft_v, seq_refj_v, erop_nmb_k,
+         seq_refy_v, country__v, seq_refmlv,
+    IF( seq_refmlv = '', 
+        SUBSTR(PASSWORD(CONCAT(seq_refy_v,seq_refa_v)), 2),
+        SUBSTR(PASSWORD(seq_refmlv), 2) ) as id
+  FROM erop WHERE seq_refa_v != ''
+""" .
+
+#<#karyotypes> rr:sqlQuery """
+#  SELECT DISTINCT 
+#    substring_index(substring_index(all_kar__k,')',1), '(', -1) as karyotype
+#  FROM erop;
+#""".
 
 <TriplesMap1>
   a rr:TriplesMap;
@@ -37,42 +91,29 @@
     rr:objectMap    [ rr:template "erop:{erop_nmb_k}"; rr:datatype xsd:string; ];
   ];
 
-  # voc:x_pubmed = http://bio2rdf.org/pubmed:{seq_refmlv}
-  rr:predicateObjectMap [
-    rr:predicateMap [ rr:constant voc:x_pubmed ];
-    rr:objectMap    [ rr:template "http://bio2rdf.org/pubmed:{seq_refmlv}"];
-  ];
-
   # b2rdf:namespace = erop
   rr:predicateObjectMap [
-    rr:predicateMap [ rr:constant  b2v:namespace];
+    rr:predicateMap [ rr:constant b2v:namespace ];
     rr:objectMap    [ rr:constant "erop"; rr:datatype xsd:string; ];
   ];
 
   # b2rdf:identifier = {erop_nmb_k}
   rr:predicateObjectMap [
-    rr:predicateMap [ rr:constant  b2v:namespace];
+    rr:predicateMap [ rr:constant b2v:identifier ];
     rr:objectMap    [ rr:column "erop_nmb_k"; rr:datatype xsd:string; ];
   ];
 
-  # voc:creation_date = {date_____k} #TODO: mal formato.
-  # dateLexicalRep ::= yearFrag '-' monthFrag '-' dayFrag timezoneFrag?
+  # voc:creation_date = {date_____k} FIXME
   rr:predicateObjectMap [
-    rr:predicateMap [ rr:constant  voc:creation_date];
+    rr:predicateMap [ rr:constant voc:creation_date ];
     rr:objectMap    [ rr:column "date_____k"; rr:datatype xsd:date; ];
   ];
 
-  # voc:modification_date = {date_m___k} #TODO: mal formato.
+  # voc:modification_date = {date_m___k}
   rr:predicateObjectMap [
-    rr:predicateMap [ rr:constant  voc:modification_date];
+    rr:predicateMap [ rr:constant voc:modification_date ];
     rr:objectMap    [ rr:column "date_m___k"; rr:datatype xsd:date; ];
   ];
-
-  # voc:x_uniprop = ...{seq_refspv}... TODO: no encuentro el enlace en bio2rdf
-  # rr:predicateObjectMap [
-  #   rr:predicateMap [ rr:constant  voc:modification_date];
-  #   rr:objectMap    [ rr:column "date_m___k"; rr:datatype xsd:date; ];
-  # ];
 
   # voc:amino_acid_number = {aar_sum__k}
   rr:predicateObjectMap [
@@ -130,37 +171,80 @@
 
   # voc:function_class = {func_cl__k}
   rr:predicateObjectMap [
-    rr:predicateMap [ rr:constant  voc:function_class];
+    rr:predicateMap [ rr:constant voc:function_class ];
     rr:objectMap    [ rr:column "func_cl__k"; rr:datatype xsd:string; ];
   ];
 
   # voc:family_name = {fam_name_k}
   rr:predicateObjectMap [
-    rr:predicateMap [ rr:constant  voc:fam_name];
+    rr:predicateMap [ rr:constant voc:fam_name ];
     rr:objectMap    [ rr:column "fam_name_k"; rr:datatype xsd:string; ];
   ];
 
   # voc:family_number = {fam_nmb__k}
   rr:predicateObjectMap [
-    rr:predicateMap [ rr:constant  voc:family_number];
+    rr:predicateMap [ rr:constant voc:family_number ];
     rr:objectMap    [ rr:column "fam_nmb__k"; rr:datatype xsd:string; ];
+  ];
+
+  # voc:organism = {species__k}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:organism ];
+    rr:objectMap    [ rr:column "species__k"; rr:datatype xsd:string; ];
+  ];
+
+  # voc:source_content = {content__k}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:source_content ];
+    rr:objectMap    [ rr:column "content__k"; rr:datatype xsd:string; ];
+  ];
+
+  # voc:secreted_by = {all_tiss_k}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:secreted_by ];
+    rr:objectMap    [ rr:column "all_tiss_k"; rr:datatype xsd:string; ];
+  ];
+
+  # rdfs:taxon = {taxon____v}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:taxon ];
+    rr:objectMap    [ rr:column "taxon____v"; rr:datatype xsd:string; ];
+  ];
+
+  # rdfs:seeAlso = {seq_refspv}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant rdfs:seeAlso ];
+    rr:objectMap    [ rr:template 
+      "http://www.uniprot.org/uniprot/{seq_refspv}" ];
   ];
 
   # voc:synonym = {syn_name_v} TODO split por ','
   rr:predicateObjectMap [
-    rr:predicateMap [ rr:constant  voc:synonym];
+    rr:predicateMap [ rr:constant voc:synonym ];
     rr:objectMap    [ rr:column "syn_name_v"; rr:datatype xsd:string; ];
   ].
 
-#TODO continuar con el kingdom, pilium, etc.
-<#source_view> rr:sqlQuery """
-  SELECT erop_nmb_k,
-         substring_index(substring_index(all_kar__k,')',1), '(', -1) as karyote,
-         all_kar__k
-  FROM erop;
-""".
+#<TriplesMap2>
+#  a rr:TriplesMap;
+#  rr:logicalTable <#dates>;
+#  rr:subjectMap [
+#    a rr:Subject;
+#    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+#    rr:termType rr:IRI;
+#  ];
+#  # voc:creation_date = {date_____k}
+#  rr:predicateObjectMap [
+#    rr:predicateMap [ rr:constant voc:creation_date ];
+#    rr:objectMap    [ rr:column "date"; rr:datatype xsd:date; ];
+#  ];
+#
+#  # voc:modification_date = {date_m___k}
+#  rr:predicateObjectMap [
+#    rr:predicateMap [ rr:constant voc:modification_date ];
+#    rr:objectMap    [ rr:column "mdate"; rr:datatype xsd:date; ];
+#  ].
 
-<TriplesMap2>
+<TriplesMap3>
   a rr:TriplesMap;
   rr:logicalTable <#source_view>;
   rr:subjectMap [
@@ -168,8 +252,146 @@
     rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
     rr:termType rr:IRI;
   ];
-  # voc:karyote = {all_kar__k}
+  # voc:karyotype = {all_kar__k}
   rr:predicateObjectMap [
-    rr:predicateMap [ rr:constant  voc:karyote];
-    rr:objectMap    [ rr:template "http://bio2rdf.org/erop:{karyote}"];
+    rr:predicateMap [ rr:constant voc:karyotype ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{karyote}"];
+  ];
+  # 
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:karyotype ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{karyote2}"];
+  ];
+  # voc:kingdom = {all_kgd__k}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:kingdom ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{kgd}"];
+  ];
+  # 
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:kingdom ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{kgd2}"];
+  ];
+  # 
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:kingdom ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{kgd3}"];
+  ];
+  # voc:phylum = {all_phyl_k}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:phylum ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{phyl1}"];
+  ];
+  # 
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:phylum ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{phyl2}"];
+  ];
+  # 
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:phylum ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{phyl3}"];
+  ];
+  # voc:class = {all_b_cl_k}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:class ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{class1}"];
+  ];
+  #
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:class ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{class2}"];
+  ];
+  #
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:class ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{class3}"];
+  ];
+  #
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:class ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{class4}"];
+  ];
+  #
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:class ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{class5}"];
+  ];
+  #
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:class ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{class6}"];
+  ].
+
+#<TriplesMap4>
+#  a rr:TriplesMap;
+#  rr:logicalTable <#karyotypes>;
+#  rr:subjectMap [
+#    a rr:Subject;
+#    rr:template "http://bio2rdf.org/erop_resource:{karyotype}";
+#    rr:termType rr:IRI;
+#  ];
+#  # voc_resource:{karyotype}
+#  rr:predicateObjectMap [
+#    rr:predicateMap [ rr:constant rdf:type ];
+#    rr:objectMap    [ rr:constant voc:Karyotype ];
+#  ].
+
+<TriplesMap5>
+  a rr:TriplesMap;
+  rr:logicalTable <#references>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop_resource:{id}";
+    rr:termType rr:IRI;
+  ];
+  # voc:title = {seq_reft_v}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:title ];
+    rr:objectMap    [ rr:column "seq_reft_v"; rr:datatype xsd:date; ];
+  ];
+  # voc:country = {country__v}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:country ];
+    rr:objectMap    [ rr:column "country__v"; rr:datatype xsd:date; ];
+  ];
+  # voc:year = {seq_refy_v}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:year ];
+    rr:objectMap    [ rr:column "seq_refy_v"; rr:datatype xsd:date; ];
+  ];
+  # voc:author = {seq_refa_v}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:author ];
+    rr:objectMap    [ rr:column "seq_refa_v"; rr:datatype xsd:date; ];
+  ];
+  # voc:x-pubmed = http://bio2rdf.org/pubmed:{seq_refmlv}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:x-pubmed ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/pubmed:{seq_refmlv}"];
+  ];
+  # voc:seeAlso = {seq_refmlv}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant rdfs:seeAlso ];
+    rr:objectMap    [ rr:template 
+      "http://www.ncbi.nlm.nih.gov/pubmed/{seq_refmlv}" ];
+  ];
+  # voc:journal = {seq_refj_v}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:journal ];
+    rr:objectMap    [ rr:column "seq_refj_v"; rr:datatype xsd:date; ];
+  ].
+
+<TriplesMap6>
+  a rr:TriplesMap;
+  rr:logicalTable <#references>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+    rr:termType rr:IRI;
+  ];
+  # voc:reference = {id}
+  rr:predicateObjectMap [
+    rr:predicateMap [ rr:constant voc:reference ];
+    rr:objectMap    [ rr:template "http://bio2rdf.org/erop_resource:{id}" ];
   ].
