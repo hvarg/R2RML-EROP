@@ -1,6 +1,6 @@
 # R2RML-EROP
-R2RML map from Erop SQL database to RDF. 
-We want to include the dataset to Bio2RDF project.
+A R2RML map from Erop SQL database to RDF. 
+We want to include the dataset into Bio2RDF project.
 
 The next table presents the map between the current Erop SQL database and RDF.
 
@@ -62,7 +62,7 @@ The next table presents the map between the current Erop SQL database and RDF.
 | `xerox____v` | `(T|F|D|P|N|NULL)`                           | `NULL`    | Skip                             |
 | `pdf______v` | `(T|F|D|P|N|NULL)`                           | `NULL`    | Skip                             |
 | `comments_v` | Comments                                     | `string`  |                                  |
-| `year_seq_v` | Erop year                                    | `date`    |                                  |
+| `year_seq_v` | Erop year                                    | `date`    | Redundant                        |
 | `country__v` | [FASDR] Country                              | `string`  | Seems inconsistent.              |
 | `complete_v` | ? (hidden)                                   | `NULL`    | Skip                             |
 
@@ -78,10 +78,10 @@ To create resources for internal references we use the hash of year+title.
 **FNCDR:** First Nucleotide Sequence Determination Reference.
 
 ## Domains
-**Karyote:** `Eukaryota`, `Akaryota`, (`Prokaryota`|`Procaryota`)
+**Karyote:** `Eukaryota`, `Akaryota`, `Pro(k|c)aryota`
 
 **Kingdom:** `Animalia`, `Viridae`, `Bacteria`, `Plantae`, `Fungi`, `Cyanobacteria`
 
-**Phylum:** `Algae`, `Annelida`, `Arthropoda`, `Arthropodan`, `Ascomycota`, `Basidiomycota`, `Bryophyta`, `Chlorophyta`, `Chordata`, `Cnidaria`, `Cyanobacteria`, `Echinodermata`, `E{1,2}ubacteria`, `Halobacteriales`, `Mollicutes`, `Mollusca`, `Mucoromycotina`, `Nematoda`, `Platyhelminthes`, `Porifera`, `Protista`, `Protochordata`, `Protozoa`, `Spermatophyta`, `Zygomycota`, `dsDNA-containing virus`, `ssRNA-containing virus`
+**Phylum:** `Algae`, `Annelida`, `Arthropoda`, `Arthropodan`, `Ascomycota`, `Basidiomycota`, `Bryophyta`, `Chlorophyta`, `Chordata`, `Cnidaria`, `Cyanobacteria`, `Echinodermata`, `E(eu|u)bacteria`, `Halobacteriales`, `Mollicutes`, `Mollusca`, `Mucoromycotina`, `Nematoda`, `Platyhelminthes`, `Porifera`, `Protista`, `Protochordata`, `Protozoa`, `Spermatophyta`, `Zygomycota`, `dsDNA-containing virus`, `ssRNA-containing virus`
 
 **Class:**  `Adenoviridae`, `Agaricomycetidae`, `Alariaceae`, `Amphibia`, `Angiospermae`, `Anthozoa`, `Arachnida`, `Ascidiacea`, `Asteroidea`, `Aves`, `Bacillariophita`, `Baculoviridae`, `Bivalv(a|ia)`, `Branchiostomidae`, `Bryopsida`, `Cactaceae`, `Caphalopoda`, `Caudovirales`, `Caudoviridae`, `Cephalopoda`, `Cestoda`, `Chlorophyta`, `Ciliophora`, `Crustacea`, `Demospongiae`, `Dothideomycetes`, `Echinoidea`, `Entamoeba`, `Eurotiomycetes`, `Gastropoda`, `Gram-negative bacteri(a|um)`, `Gram-positive bacterium`, `Halobacteriacae`, `Hirudinea`, `Holothuroidea`, `Hordeiviridae`, `Hydrozoa`, `Hymenomycetes`, `Insecta`, `Mammalia`, `(Mollusca|mollusk)`, `Myoviridae`, `Oligochaeta`, `Orthomyxoviridae`, `Paramyxoviridae`, `Philariasis`, `Phytoplasma`, `Pisces`, `Polychaeta`, `Reptil(aia|ia|ian)`, `Retroviridae`, `Saccharomycetes`, `Schizosaccharomycetes`, `Scyp(hozoa|ozoa)`, `Secernentea`, `Sequiviridae`, `Sordariomycete(s|s_)`, `Trematoda`, `Turbellaria`, `Urediniomycetes`, `Ustilaginomycetes`, `Zygomycets`
