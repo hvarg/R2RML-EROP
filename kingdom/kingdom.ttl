@@ -44,7 +44,7 @@
     rr:termType rr:IRI;
   ];
   rr:predicateObjectMap [
-    rr:predicate voc:kingdom;
+    rr:predicate voc:source_kingdom;
     rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{kingdom}" ];
   ].
 

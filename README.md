@@ -7,7 +7,7 @@ The next table presents the map between the current Erop SQL database and RDF.
 | Name         | Details                              | New type  | Note                             |
 | ------------ | ------------------------------------ | --------- | -------------------------------- |
 | `row_id`     | Row's ID                             | `NULL`    | Skip                             |
-| `erop_nmb_k` | EROP accession                       | `string`  |                                  |
+| `erop_nmb_k` | EROP accession                       | `URI`     | Principal resource               |
 | `date_____k` | Creation date                        | `date`    | Wrong format                     |
 | `date_m___k` | Modification date                    | `date`    | Wrong format                     |
 | `fam_nmb__k` | [FASD] Structural family number      | `decimal` |                                  |
@@ -18,10 +18,10 @@ The next table presents the map between the current Erop SQL database and RDF.
 | `species__k` | [FS] All organism sources            | `URI`     | Can be parsed                    |
 | `all_kar__k` | [FS] Karyote (max 2 of 3)            | `URI`     | Map in `./karyote`               |
 | `all_kgd__k` | [FS] Kingdom (max 3 of 6)            | `URI`     | Map in `./kingdom`               |
-| `all_phyl_k` | [FS] Phylum (max 5 of 27)            | `URI`     | Map                              |
-| `all_b_cl_k` | [FS] Class (max 6 of 62)             | `URI`     | Map                              |
+| `all_phyl_k` | [FS] Phylum (max 5 of 27)            | `URI`     | Map in `./phylum`                |
+| `all_b_cl_k` | [FS] Class (max 6 of 62)             | `URI`     | Map in `./class`                 |
 | `all_tiss_k` | [FS] Tissue/organ/cell/secreted      | `string`  |                                  |
-| `func_cl__k` | [FFD] Function Class (6 of 169)      | `string`  | Can be parsed **TODO**           |
+| `func_cl__k` | [FFD] Function Class (6 of 169)      | `string`  | Map in `./function`              |
 | `function_k` | [FFD] Function                       | `string`  |                                  |
 | `fragment_k` | `(N|Y| |NULL)`                       | `NULL`    | Skip                             |
 | `aar_sum__k` | [FASD] Aminoacid Number              | `float`   |                                  |
@@ -71,6 +71,8 @@ To create resources for internal references we use the hash of year+title.
 ## About acronyms
 **FS:** First Source of the oligopeptide
 
+**FFD:** First Function Determination.
+
 **FACD:** First Aminoacid Sequence Determination.
 
 **FACDR:** First Aminoacid Sequence Determination Reference.
@@ -82,6 +84,6 @@ To create resources for internal references we use the hash of year+title.
 
 **Kingdom:** `Animalia`, `Viridae`, `Bacteria`, `Plantae`, `Fungi`, `Cyanobacteria`
 
-**Phylum:** `Algae`, `Annelida`, `Arthropoda`, `Arthropodan`, `Ascomycota`, `Basidiomycota`, `Bryophyta`, `Chlorophyta`, `Chordata`, `Cnidaria`, `Cyanobacteria`, `Echinodermata`, `E(eu|u)bacteria`, `Halobacteriales`, `Mollicutes`, `Mollusca`, `Mucoromycotina`, `Nematoda`, `Platyhelminthes`, `Porifera`, `Protista`, `Protochordata`, `Protozoa`, `Spermatophyta`, `Zygomycota`, `dsDNA-containing virus`, `ssRNA-containing virus`
+**Phylum:** `Algae`, `Annelida`, `Arthropoda`, `Arthropodan`, `Ascomycota`, `Basidiomycota`, `Bryophyta`, `Chlorophyta`, `Chordata`, `Cnidaria`, `Cyanobacteria`, `Echinodermata`, `Eubacteria`, `Halobacteriales`, `Mollicutes`, `Mollusca`, `Mucoromycotina`, `Nematoda`, `Platyhelminthes`, `Porifera`, `Protista`, `Protochordata`, `Protozoa`, `Spermatophyta`, `Zygomycota`, `dsDNA-containing virus`, `ssRNA-containing virus`
 
-**Class:**  `Adenoviridae`, `Agaricomycetidae`, `Alariaceae`, `Amphibia`, `Angiospermae`, `Anthozoa`, `Arachnida`, `Ascidiacea`, `Asteroidea`, `Aves`, `Bacillariophita`, `Baculoviridae`, `Bivalv(a|ia)`, `Branchiostomidae`, `Bryopsida`, `Cactaceae`, `Caphalopoda`, `Caudovirales`, `Caudoviridae`, `Cephalopoda`, `Cestoda`, `Chlorophyta`, `Ciliophora`, `Crustacea`, `Demospongiae`, `Dothideomycetes`, `Echinoidea`, `Entamoeba`, `Eurotiomycetes`, `Gastropoda`, `Gram-negative bacteri(a|um)`, `Gram-positive bacterium`, `Halobacteriacae`, `Hirudinea`, `Holothuroidea`, `Hordeiviridae`, `Hydrozoa`, `Hymenomycetes`, `Insecta`, `Mammalia`, `(Mollusca|mollusk)`, `Myoviridae`, `Oligochaeta`, `Orthomyxoviridae`, `Paramyxoviridae`, `Philariasis`, `Phytoplasma`, `Pisces`, `Polychaeta`, `Reptil(aia|ia|ian)`, `Retroviridae`, `Saccharomycetes`, `Schizosaccharomycetes`, `Scyp(hozoa|ozoa)`, `Secernentea`, `Sequiviridae`, `Sordariomycete(s|s_)`, `Trematoda`, `Turbellaria`, `Urediniomycetes`, `Ustilaginomycetes`, `Zygomycets`
+**Class:**  `Adenoviridae`, `Agaricomycetidae`, `Alariaceae`, `Amphibia`, `Angiospermae`, `Anthozoa`, `Arachnida`, `Ascidiacea`, `Asteroidea`, `Aves`, `Bacillariophita`, `Baculoviridae`, `Bivalva`, `Branchiostomidae`, `Bryopsida`, `Cactaceae`, `Caphalopoda`, `Caudovirales`, `Caudoviridae`, `Cephalopoda`, `Cestoda`, `Chlorophyta`, `Ciliophora`, `Crustacea`, `Demospongiae`, `Dothideomycetes`, `Echinoidea`, `Entamoeba`, `Eurotiomycetes`, `Gastropoda`, `Gram-negative bacteri(a|um)`, `Gram-positive bacterium`, `Halobacteriacae`, `Hirudinea`, `Holothuroidea`, `Hordeiviridae`, `Hydrozoa`, `Hymenomycetes`, `Insecta`, `Mammalia`, `(Mollusca|mollusk)`, `Myoviridae`, `Oligochaeta`, `Orthomyxoviridae`, `Paramyxoviridae`, `Philariasis`, `Phytoplasma`, `Pisces`, `Polychaeta`, `Reptilia`, `Retroviridae`, `Saccharomycetes`, `Schizosaccharomycetes`, `Scyphozoa`, `Secernentea`, `Sequiviridae`, `Sordariomycetes`, `Trematoda`, `Turbellaria`, `Urediniomycetes`, `Ustilaginomycetes`, `Zygomycets`

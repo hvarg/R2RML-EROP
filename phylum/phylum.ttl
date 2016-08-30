@@ -9,56 +9,62 @@
 @prefix res:  <http://bio2rdf.org/erop_resource:> .
 @prefix b2v:  <http://bio2rdf.org/bio2rdf_vocabulary:> .
 
-<#karyotes> rr:sqlQuery """
+<#phylums> rr:sqlQuery """
   SELECT
     erop.erop_nmb_k, 
     REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX
-        (erop.all_kar__k, ',', numbers.n), ',', -1), '(', -1), ')', '') 
-        karyote
-  FROM (SELECT 1 n UNION ALL SELECT 2) numbers
+        (erop.all_phyl_k, ',', numbers.n), ',', -1), '(', -1), ')', '') 
+        phylum
+  FROM (
+    SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3
+    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6
+  ) numbers
   INNER JOIN erop ON
-    CHAR_LENGTH(erop.all_kar__k) -CHAR_LENGTH(REPLACE(erop.all_kar__k, ',', ''))
+    CHAR_LENGTH(erop.all_phyl_k) -CHAR_LENGTH(REPLACE(erop.all_phyl_k, ',', ''))
     >= numbers.n-1
 """.
 #Labels
-<#distinct_kar> rr:sqlQuery """
+<#distinct_phyl> rr:sqlQuery """
   SELECT DISTINCT
     REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX
-        (erop.all_kar__k, ',', numbers.n), ',', -1), '(', -1), ')', '') 
-        karyote,
+        (erop.all_phyl_k, ',', numbers.n), ',', -1), '(', -1), ')', '') 
+        phylum,
     REPLACE(REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX
-        (erop.all_kar__k, ',', numbers.n), ',', -1), ' ', ''), '(', ' (') 
+        (erop.all_phyl_k, ',', numbers.n), ',', -1), ' ', ''), '(', ' (') 
         label
-  FROM (SELECT 1 n UNION ALL SELECT 2) numbers
+  FROM (
+    SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3
+    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6
+  ) numbers
   INNER JOIN erop ON
-    CHAR_LENGTH(erop.all_kar__k) -CHAR_LENGTH(REPLACE(erop.all_kar__k, ',', ''))
+    CHAR_LENGTH(erop.all_phyl_k) -CHAR_LENGTH(REPLACE(erop.all_phyl_k, ',', ''))
     >= numbers.n-1
 """.
 
 <TriplesMap1>
   a rr:TriplesMap;
-  rr:logicalTable <#karyotes>;
+  rr:logicalTable <#phylums>;
   rr:subjectMap [
     a rr:Subject;
     rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
     rr:termType rr:IRI;
   ];
   rr:predicateObjectMap [
-    rr:predicate voc:source_karyote;
-    rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{karyote}" ];
+    rr:predicate voc:source_phylum;
+    rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{phylum}" ];
   ].
 
 <TriplesMap2>
   a rr:TriplesMap;
-  rr:logicalTable <#distinct_kar>;
+  rr:logicalTable <#distinct_phyl>;
   rr:subjectMap [
     a rr:Subject;
-    rr:template "http://bio2rdf.org/erop_resource:{karyote}";
+    rr:template "http://bio2rdf.org/erop_resource:{phylum}";
     rr:termType rr:IRI;
   ];
   rr:predicateObjectMap [
     rr:predicate rdf:type;
-    rr:object res:Karyote;
+    rr:object res:Phylum;
   ];
   rr:predicateObjectMap [
     rr:predicate rdfs:label;

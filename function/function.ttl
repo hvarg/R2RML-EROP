@@ -1,0 +1,63 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix erop: <http://bio2rdf.org/erop:> .
+@prefix voc:  <http://bio2rdf.org/erop_vocabulary:> .
+@prefix res:  <http://bio2rdf.org/erop_resource:> .
+@prefix b2v:  <http://bio2rdf.org/bio2rdf_vocabulary:> .
+
+<#functions> rr:sqlQuery """
+  SELECT
+    erop.erop_nmb_k, 
+    TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX
+        (erop.func_cl__k, ',', numbers.n), ',', -1)) function
+  FROM (
+    SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3
+    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6
+  ) numbers
+  INNER JOIN erop ON
+    CHAR_LENGTH(erop.func_cl__k) -CHAR_LENGTH(REPLACE(erop.func_cl__k, ',', ''))
+    >= numbers.n-1
+""".
+#Labels
+<#distinct_func> rr:sqlQuery """
+  SELECT DISTINCT
+    TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX
+        (erop.func_cl__k, ',', numbers.n), ',', -1)) function
+  FROM (
+    SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3
+    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6
+  ) numbers
+  INNER JOIN erop ON
+    CHAR_LENGTH(erop.func_cl__k) -CHAR_LENGTH(REPLACE(erop.func_cl__k, ',', ''))
+    >= numbers.n-1
+""".
+
+<TriplesMap1>
+  a rr:TriplesMap;
+  rr:logicalTable <#functions>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:function_class;
+    rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{function}" ];
+  ].
+
+<TriplesMap2>
+  a rr:TriplesMap;
+  rr:logicalTable <#distinct_func>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop_resource:{function}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdf:type;
+    rr:object res:Function;
+  ].
