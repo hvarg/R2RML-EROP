@@ -1,0 +1,66 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix erop: <http://bio2rdf.org/erop:> .
+@prefix voc:  <http://bio2rdf.org/erop_vocabulary:> .
+@prefix res:  <http://bio2rdf.org/erop_resource:> .
+@prefix b2v:  <http://bio2rdf.org/bio2rdf_vocabulary:> .
+
+<#karyotes> rr:sqlQuery """
+  SELECT
+    erop.erop_nmb_k, 
+    REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX
+        (erop.all_kar__k, ',', numbers.n), ',', -1), '(', -1), ')', '') 
+        karyote
+  FROM (SELECT 1 n UNION ALL SELECT 2) numbers
+  INNER JOIN erop ON
+    CHAR_LENGTH(erop.all_kar__k) -CHAR_LENGTH(REPLACE(erop.all_kar__k, ',', ''))
+    >= numbers.n-1
+""".
+#Labels
+<#distinct_kar> rr:sqlQuery """
+  SELECT DISTINCT
+    REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX
+        (erop.all_kar__k, ',', numbers.n), ',', -1), '(', -1), ')', '') 
+        karyote,
+    REPLACE(REPLACE(SUBSTRING_INDEX(SUBSTRING_INDEX
+        (erop.all_kar__k, ',', numbers.n), ',', -1), ' ', ''), '(', ' (') 
+        label
+  FROM (SELECT 1 n UNION ALL SELECT 2) numbers
+  INNER JOIN erop ON
+    CHAR_LENGTH(erop.all_kar__k) -CHAR_LENGTH(REPLACE(erop.all_kar__k, ',', ''))
+    >= numbers.n-1
+""".
+
+<TriplesMap1>
+  a rr:TriplesMap;
+  rr:logicalTable <#karyotes>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:karyote;
+    rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{karyote}" ];
+  ].
+
+<TriplesMap2>
+  a rr:TriplesMap;
+  rr:logicalTable <#distinct_kar>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop_resource:{karyote}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdf:type;
+    rr:object res:Karyote;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap    [ rr:column "label"; rr:datatype xsd:string; ];
+  ].
