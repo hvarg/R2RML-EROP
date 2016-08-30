@@ -15,12 +15,12 @@ The next table presents the map between the current Erop SQL database and RDF.
 | `pep_nmb__k` | Oligopeptide number                  | `decimal` | *hidden*                         |
 | `pep_name_k` | Oligopeptide name                    | `string`  |                                  |
 | `f`          | Always NULL                          | `NULL`    | Skip                             |
-| `species__k` | [FS] All organism sources            | `URI`     | Can be parsed                    |
+| `species__k` | [FS] All organism sources            | `URI`     | Split in `./split`. **TODO**     |
 | `all_kar__k` | [FS] Karyote (max 2 of 3)            | `URI`     | Map in `./karyote`               |
 | `all_kgd__k` | [FS] Kingdom (max 3 of 6)            | `URI`     | Map in `./kingdom`               |
 | `all_phyl_k` | [FS] Phylum (max 5 of 27)            | `URI`     | Map in `./phylum`                |
 | `all_b_cl_k` | [FS] Class (max 6 of 62)             | `URI`     | Map in `./class`                 |
-| `all_tiss_k` | [FS] Tissue/organ/cell/secreted      | `string`  |                                  |
+| `all_tiss_k` | [FS] Tissue/organ/cell/secreted      | `string`  | Split in `./split`. **TODO**     |
 | `func_cl__k` | [FFD] Function Class (6 of 169)      | `string`  | Map in `./function`              |
 | `function_k` | [FFD] Function                       | `string`  |                                  |
 | `fragment_k` | `(N|Y| |NULL)`                       | `NULL`    | Skip                             |
@@ -34,7 +34,7 @@ The next table presents the map between the current Erop SQL database and RDF.
 | `synth_pm_k` | [FASD] Synthesis PMID                | `URI`     | http://bio2rdf.org/pubmed:{PMID} |
 | `content__k` | [FS] Content                         | `string`  |                                  |
 | `seq_1____k` | [FASD] Sequence                      | `string`  | Remove empty spaces              |
-| `syn_name_v` | Synonyms                             | `string`  | Can be parsed, comma separated   |
+| `syn_name_v` | Synonyms                             | `string`  | Split in `./split`               |
 | `part_of__v` | [FASD] Precursor                     | `string`  |                                  |
 | `taxon____v` | [FS] Taxon                           | `string`  |                                  |
 | `ss_y_____v` | `(Y| |NULL)`                         | `NULL`    | Skip                             |

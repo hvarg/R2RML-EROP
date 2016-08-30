@@ -1,0 +1,95 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix erop: <http://bio2rdf.org/erop:> .
+@prefix voc:  <http://bio2rdf.org/erop_vocabulary:> .
+@prefix res:  <http://bio2rdf.org/erop_resource:> .
+@prefix b2v:  <http://bio2rdf.org/bio2rdf_vocabulary:> .
+
+<#synonyms> rr:sqlQuery """
+  SELECT
+    erop.erop_nmb_k, 
+    TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX
+        (erop.syn_name_v, ',', numbers.n), ',', -1)) synonym
+  FROM (
+    SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3
+    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6
+  ) numbers
+  INNER JOIN erop ON
+    CHAR_LENGTH(erop.syn_name_v) -CHAR_LENGTH(REPLACE(erop.syn_name_v, ',', ''))
+    >= numbers.n-1
+""".
+
+<TriplesMap1>
+  a rr:TriplesMap;
+  rr:logicalTable <#synonyms>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:synonym;
+    rr:objectMap [ rr:column "synonym"; rr:datatype xsd:string; ];
+  ].
+
+# This can be mapped to URIs TODO.
+<#tissues> rr:sqlQuery """
+  SELECT
+    erop.erop_nmb_k, 
+    TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX
+        (erop.all_tiss_k, ',', numbers.n), ',', -1)) tissue
+  FROM (
+    SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8
+    UNION ALL SELECT 9 UNION ALL SELECT 10
+  ) numbers
+  INNER JOIN erop ON
+    CHAR_LENGTH(erop.all_tiss_k) -CHAR_LENGTH(REPLACE(erop.all_tiss_k, ',', ''))
+    >= numbers.n-1
+""".
+
+<TriplesMap2>
+  a rr:TriplesMap;
+  rr:logicalTable <#tissues>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:source_secreted;
+    rr:objectMap [ rr:column "tissue"; rr:datatype xsd:string; ];
+  ].
+
+# This can be mapped to URIs TODO.
+<#organism> rr:sqlQuery """
+  SELECT
+    erop.erop_nmb_k, 
+    TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX
+        (erop.species__k, ',', numbers.n), ',', -1)) specie
+  FROM (
+    SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8
+    UNION ALL SELECT 9 UNION ALL SELECT 10
+  ) numbers
+  INNER JOIN erop ON
+    CHAR_LENGTH(erop.species__k) -CHAR_LENGTH(REPLACE(erop.species__k, ',', ''))
+    >= numbers.n-1
+""".
+
+<TriplesMap3>
+  a rr:TriplesMap;
+  rr:logicalTable <#organism>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:source_organism;
+    rr:objectMap [ rr:column "specie"; rr:datatype xsd:string; ];
+  ].
