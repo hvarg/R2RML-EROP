@@ -8,8 +8,8 @@ The next table presents the map between the current Erop SQL database and RDF.
 | ------------ | ------------------------------------ | --------- | -------------------------------- |
 | `row_id`     | Row's ID                             | `NULL`    | Skip                             |
 | `erop_nmb_k` | EROP accession                       | `URI`     | Principal resource               |
-| `date_____k` | Creation date                        | `date`    | Wrong format                     |
-| `date_m___k` | Modification date                    | `date`    | Wrong format                     |
+| `date_____k` | Creation date                        | `date`    | Format: `%d.%m.%Y` -> `%Y-%m-%d` |
+| `date_m___k` | Modification date                    | `date`    | Format: `%d.%m.%Y` -> `%Y-%m-%d` |
 | `fam_nmb__k` | [FASD] Structural family number      | `decimal` |                                  |
 | `fam_name_k` | [FASD] Structural family name        | `string`  |                                  |
 | `pep_nmb__k` | Oligopeptide number                  | `decimal` | *hidden*                         |

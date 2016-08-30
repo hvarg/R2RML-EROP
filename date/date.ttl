@@ -1,0 +1,33 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix erop: <http://bio2rdf.org/erop:> .
+@prefix voc:  <http://bio2rdf.org/erop_vocabulary:> .
+@prefix res:  <http://bio2rdf.org/erop_resource:> .
+@prefix b2v:  <http://bio2rdf.org/bio2rdf_vocabulary:> .
+
+<#synonyms> rr:sqlQuery """
+  SELECT erop_nmb_k, 
+         STR_TO_DATE(date_____k, '%d.%m.%Y') as date1,
+         STR_TO_DATE(date_m___k, '%d.%m.%Y') as date2 from erop
+""".
+
+<TriplesMap1>
+  a rr:TriplesMap;
+  rr:logicalTable <#synonyms>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:creation_date;
+    rr:objectMap [ rr:column "date1"; rr:datatype xsd:date; ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:modification_date;
+    rr:objectMap [ rr:column "date2"; rr:datatype xsd:date; ];
+  ].
