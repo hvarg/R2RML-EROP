@@ -7,7 +7,7 @@ The next table presents the map between the current Erop SQL database and RDF.
 | Name         | Details                              | New type  | Note                             |
 | ------------ | ------------------------------------ | --------- | -------------------------------- |
 | `row_id`     | Row's ID                             | `NULL`    | Skip                             |
-| `erop_nmb_k` | EROP accession                       | `URI`     | Principal resource               |
+| `erop_nmb_k` | EROP accession                       | `URI`     | Main resource                    |
 | `date_____k` | Creation date                        | `date`    | Format: `%d.%m.%Y` -> `%Y-%m-%d` |
 | `date_m___k` | Modification date                    | `date`    | Format: `%d.%m.%Y` -> `%Y-%m-%d` |
 | `fam_nmb__k` | [FASD] Structural family number      | `decimal` |                                  |
@@ -15,12 +15,12 @@ The next table presents the map between the current Erop SQL database and RDF.
 | `pep_nmb__k` | Oligopeptide number                  | `decimal` | *hidden*                         |
 | `pep_name_k` | Oligopeptide name                    | `string`  |                                  |
 | `f`          | Always NULL                          | `NULL`    | Skip                             |
-| `species__k` | [FS] All organism sources            | `URI`     | Split in `./split`. **TODO**     |
+| `species__k` | [FS] All organism sources            | `URI`     | Split in `./split`               |
 | `all_kar__k` | [FS] Karyote (max 2 of 3)            | `URI`     | Map in `./karyote`               |
 | `all_kgd__k` | [FS] Kingdom (max 3 of 6)            | `URI`     | Map in `./kingdom`               |
 | `all_phyl_k` | [FS] Phylum (max 5 of 27)            | `URI`     | Map in `./phylum`                |
 | `all_b_cl_k` | [FS] Class (max 6 of 62)             | `URI`     | Map in `./class`                 |
-| `all_tiss_k` | [FS] Tissue/organ/cell/secreted      | `string`  | Split in `./split`. **TODO**     |
+| `all_tiss_k` | [FS] Tissue/organ/cell/secreted      | `string`  | Split in `./split`               |
 | `func_cl__k` | [FFD] Function Class (6 of 169)      | `string`  | Map in `./function`              |
 | `function_k` | [FFD] Function                       | `string`  |                                  |
 | `fragment_k` | `(N|Y| |NULL)`                       | `NULL`    | Skip                             |
@@ -64,9 +64,11 @@ The next table presents the map between the current Erop SQL database and RDF.
 | `comments_v` | Comments                             | `string`  |                                  |
 | `year_seq_v` | Erop year                            | `date`    | Redundant                        |
 | `country__v` | [FASDR] Country                      | `string`  | Seems inconsistent.              |
-| `complete_v` | ? (hidden)                           | `NULL`    | Skip                             |
+| `complete_v` | ?                                    | `NULL`    | Skip (*hidden*)                  |
 
 To create resources for internal references we use the hash of year+title.
+
+`species__k` and `all_tiss_k` can be mapped.
 
 ## About acronyms
 **FS:** First Source of the oligopeptide
