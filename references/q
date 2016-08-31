@@ -1,7 +1,0 @@
-  SELECT erop_nmb_k,
-    IF( nuc_refmlv != '', SUBSTR(PASSWORD(nuc_refmlv), 2),
-      IF( nuc_reft_v != '', SUBSTR(PASSWORD(nuc_reft_v), 2),
-        SUBSTR(PASSWORD(CONCAT(nuc_refy_v, nuc_refa_v)), 2)
-      )
-    ) as id
-  FROM erop WHERE (nuc_refmlv != '' OR nuc_reft_v != '' OR nuc_refa_v != '');
