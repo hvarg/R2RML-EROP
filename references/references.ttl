@@ -1,0 +1,175 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix erop: <http://bio2rdf.org/erop:> .
+@prefix voc:  <http://bio2rdf.org/erop_vocabulary:> .
+@prefix res:  <http://bio2rdf.org/erop_resource:> .
+@prefix b2v:  <http://bio2rdf.org/bio2rdf_vocabulary:> .
+
+<#erop_refASD> rr:sqlQuery """
+  SELECT erop_nmb_k,
+    IF( seq_refmlv != '', SUBSTR(PASSWORD(seq_refmlv), 2),
+      IF( seq_reft_v != '', SUBSTR(PASSWORD(seq_reft_v), 2),
+        SUBSTR(PASSWORD(CONCAT(seq_refy_v, seq_refa_v)), 2)
+      )
+    ) as id
+  FROM erop WHERE (seq_refmlv != '' OR seq_reft_v != '' OR seq_refa_v != '');
+""" .
+
+<#referencesASD> rr:sqlQuery """
+  SELECT 
+    seq_refa_v, seq_reft_v, seq_refj_v, seq_refy_v, seq_refspv, seq_refmlv,
+    country__v, 
+    IF( seq_refmlv != '', SUBSTR(PASSWORD(seq_refmlv), 2),
+      IF( seq_reft_v != '', SUBSTR(PASSWORD(seq_reft_v), 2),
+        SUBSTR(PASSWORD(CONCAT(seq_refy_v, seq_refa_v)), 2)
+      )
+    ) as id
+  FROM erop WHERE (seq_refmlv != '' OR seq_reft_v != '' OR seq_refa_v != '');
+""" .
+
+<#erop_refNSD> rr:sqlQuery """
+  SELECT erop_nmb_k,
+    IF( nuc_refmlv != '', SUBSTR(PASSWORD(nuc_refmlv), 2),
+      IF( nuc_reft_v != '', SUBSTR(PASSWORD(nuc_reft_v), 2),
+        SUBSTR(PASSWORD(CONCAT(nuc_refy_v, nuc_refa_v)), 2)
+      )
+    ) as id
+  FROM erop WHERE (nuc_refmlv != '' OR nuc_reft_v != '' OR nuc_refa_v != '');
+""" .
+
+<#referencesNSD> rr:sqlQuery """
+  SELECT 
+    nuc_refa_v, nuc_reft_v, nuc_refj_v, nuc_refy_v, nuc_refspv, nuc_refmlv,
+    IF( nuc_refmlv != '', SUBSTR(PASSWORD(nuc_refmlv), 2),
+      IF( nuc_reft_v != '', SUBSTR(PASSWORD(nuc_reft_v), 2),
+        SUBSTR(PASSWORD(CONCAT(nuc_refy_v, nuc_refa_v)), 2)
+      )
+    ) as id
+  FROM erop WHERE (nuc_refmlv != '' OR nuc_reft_v != '' OR nuc_refa_v != '');
+""" .
+
+<TriplesMap1>
+  a rr:TriplesMap;
+  rr:logicalTable <#erop_refASD>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:asd_reference;
+    rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{id}" ];
+  ].
+
+<TriplesMap2>
+  a rr:TriplesMap;
+  rr:logicalTable <#referencesASD>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop_resource:{id}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:title;
+    rr:objectMap [ rr:column "seq_reft_v"; rr:datatype xsd:string; ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:author;
+    rr:objectMap [ rr:column "seq_refa_v"; rr:datatype xsd:string; ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:journal;
+    rr:objectMap [ rr:column "seq_refj_v"; rr:datatype xsd:string; ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:year;
+    rr:objectMap [ rr:column "seq_refy_v"; rr:datatype xsd:integer; ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:country;
+    rr:objectMap [ rr:column "country__v"; rr:datatype xsd:string; ];
+  ];
+  # voc:x-pubmed = http://bio2rdf.org/pubmed:{seq_refmlv}
+  rr:predicateObjectMap [
+    rr:predicate voc:x-pubmed;
+    rr:objectMap [ rr:template "http://bio2rdf.org/pubmed:{seq_refmlv}"];
+  ];
+  # rdfs:seeAlso pubmed
+  rr:predicateObjectMap [
+    rr:predicate rdfs:seeAlso;
+    rr:objectMap [ rr:template 
+        "http://www.ncbi.nlm.nih.gov/pubmed/{seq_refmlv}" ];
+  ];
+  # rdfs:seeAlso uniprot
+  rr:predicateObjectMap [
+    rr:predicate rdfs:seeAlso;
+    rr:objectMap [ rr:template 
+      "http://www.uniprot.org/uniprot/{seq_refspv}" ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdf:type;
+    rr:object res:FASDReference;
+  ].
+
+<TriplesMap3>
+  a rr:TriplesMap;
+  rr:logicalTable <#erop_refNSD>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:nsd_reference;
+    rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{id}" ];
+  ].
+
+<TriplesMap4>
+  a rr:TriplesMap;
+  rr:logicalTable <#referencesNSD>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop_resource:{id}";
+    rr:termType rr:IRI;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:title;
+    rr:objectMap [ rr:column "nuc_reft_v"; rr:datatype xsd:string; ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:author;
+    rr:objectMap [ rr:column "nuc_refa_v"; rr:datatype xsd:string; ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:journal;
+    rr:objectMap [ rr:column "nuc_refj_v"; rr:datatype xsd:string; ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:year;
+    rr:objectMap [ rr:column "nuc_refy_v"; rr:datatype xsd:integer; ];
+  ];
+  # voc:x-pubmed = http://bio2rdf.org/pubmed:{nuc_refmlv}
+  rr:predicateObjectMap [
+    rr:predicate voc:x-pubmed;
+    rr:objectMap [ rr:template "http://bio2rdf.org/pubmed:{nuc_refmlv}"];
+  ];
+  # rdfs:seeAlso pubmed
+  rr:predicateObjectMap [
+    rr:predicate rdfs:seeAlso;
+    rr:objectMap [ rr:template 
+        "http://www.ncbi.nlm.nih.gov/pubmed/{nuc_refmlv}" ];
+  ];
+  # rdfs:seeAlso uniprot
+  rr:predicateObjectMap [
+    rr:predicate rdfs:seeAlso;
+    rr:objectMap [ rr:template 
+      "http://www.uniprot.org/uniprot/{nuc_refspv}" ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdf:type;
+    rr:object res:FANDReference;
+  ].
