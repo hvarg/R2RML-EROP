@@ -1,0 +1,175 @@
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix erop: <http://bio2rdf.org/erop:> .
+@prefix voc:  <http://bio2rdf.org/erop_vocabulary:> .
+@prefix res:  <http://bio2rdf.org/erop_resource:> .
+@prefix b2v:  <http://bio2rdf.org/bio2rdf_vocabulary:> .
+
+<#all> rr:sqlQuery """
+  SELECT
+    erop_nmb_k, fam_nmb__k, fam_name_k, pep_nmb__k, pep_name_k, function_k,
+    aar_sum__k, tsr_sum__k, m_w______k, m_w_c____k, pi_______k, pi_c_____k,
+    spat_pm__k, synth_pm_k, ss_b_pm__v, n_std_pm_v,
+    content__k, part_of__v, taxon____v, comments_v,
+    TRIM(seq_1____k) AS seq_1, ss_bonds_v, n_stnd_r_v
+  FROM erop;
+""".
+#Identification, numbers, references, strings, data
+
+<TriplesMap1>
+  a rr:TriplesMap;
+  rr:logicalTable <#all>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/erop:{erop_nmb_k}";
+    rr:termType rr:IRI;
+    rr:class voc:Oligopeptide;
+    rr:class voc:Resource;
+  ];
+
+  ############################ Identification ################################
+  # rdfs:label =  {pep_name_k} TODO: OWL
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "pep_name_k"; rr:datatype xsd:string; ];
+  ];
+  # voc:pep_name =  {pep_name_k}
+  rr:predicateObjectMap [
+    rr:predicate voc:pep_name;
+    rr:objectMap [ rr:column "pep_name_k"; rr:datatype xsd:string; ];
+  ];
+  # voc:pep_number =  {pep_nmb__k}
+  rr:predicateObjectMap [
+    rr:predicate voc:pep_number;
+    rr:objectMap [ rr:column "pep_nmb__k"; rr:datatype xsd:integer; ];
+  ];
+
+  # dc:identifier = erop:{erop_nmb_k} 
+  rr:predicateObjectMap [
+    rr:predicate dc:identifier;
+    rr:objectMap [ rr:template "erop:{erop_nmb_k}"; rr:datatype xsd:string; ];
+  ];
+  # b2rdf:namespace = erop
+  rr:predicateObjectMap [
+    rr:predicate b2v:namespace;
+    rr:objectMap [ rr:constant "erop"; rr:datatype xsd:string; ];
+  ];
+  # b2rdf:identifier = {erop_nmb_k}
+  rr:predicateObjectMap [
+    rr:predicate b2v:identifier;
+    rr:objectMap [ rr:column "erop_nmb_k"; rr:datatype xsd:string; ];
+  ];
+
+  # voc:family_name = {fam_name_k}
+  rr:predicateObjectMap [
+    rr:predicate voc:family_name;
+    rr:objectMap [ rr:column "fam_name_k"; rr:datatype xsd:string; ];
+  ];
+  # voc:family_number = {fam_nmb__k}
+  rr:predicateObjectMap [
+    rr:predicate voc:family_number;
+    rr:objectMap [ rr:column "fam_nmb__k"; rr:datatype xsd:integer; ];
+  ];
+
+  # voc:function = {function_k}
+  rr:predicateObjectMap [
+    rr:predicate voc:function;
+    rr:objectMap [ rr:column "function_k"; rr:datatype xsd:string; ];
+  ];
+
+  ############################## Numbers #####################################
+  # voc:aminoacid_number = {aar_sum__k}
+  rr:predicateObjectMap [
+    rr:predicate voc:aminoacid_number;
+    rr:objectMap [ rr:column "aar_sum__k"; rr:datatype xsd:integer; ];
+  ];
+  # voc:radical_number = {tsr_sum__k}
+  rr:predicateObjectMap [
+    rr:predicate voc:radical_number;
+    rr:objectMap [ rr:column "tsr_sum__k"; rr:datatype xsd:float; ];
+  ];
+  # voc:calculated_molecular_mass = {m_w_c____k}
+  rr:predicateObjectMap [
+    rr:predicate voc:calculated_molecular_mass;
+    rr:objectMap [ rr:column "m_w_c____k"; rr:datatype xsd:float; ];
+  ];
+  # voc:experimental_molecular_mass = {m_w______k}
+  rr:predicateObjectMap [
+    rr:predicate voc:experimental_molecular_mass;
+    rr:objectMap [ rr:column "m_w______k"; rr:datatype xsd:float; ];
+  ];
+  # voc:calculated_pI = {pi_c_____k}
+  rr:predicateObjectMap [
+    rr:predicate voc:calculated_pI;
+    rr:objectMap [ rr:column "pi_c_____k"; rr:datatype xsd:float; ];
+  ];
+  # voc:experimental_pI = {pi_c_____k}
+  rr:predicateObjectMap [
+    rr:predicate voc:experimental_pI;
+    rr:objectMap [ rr:column "pi_______k"; rr:datatype xsd:float; ];
+  ];
+
+  ############################## Strings #####################################
+  # voc:source_content = {content__k}
+  rr:predicateObjectMap [
+    rr:predicate voc:content;
+    rr:objectMap [ rr:column "content__k"; rr:datatype xsd:string; ];
+  ];
+  # voc:precursor = {part_of__v}
+  rr:predicateObjectMap [
+    rr:predicate voc:precursor;
+    rr:objectMap [ rr:column "part_of__v"; rr:datatype xsd:string; ];
+  ];
+  # voc:taxon = {taxon____v}
+  rr:predicateObjectMap [
+    rr:predicate voc:taxon;
+    rr:objectMap    [ rr:column "taxon____v"; rr:datatype xsd:string; ];
+  ];
+  # voc:taxon = {comments_v}
+  rr:predicateObjectMap [
+    rr:predicate voc:comments;
+    rr:objectMap    [ rr:column "comments_v"; rr:datatype xsd:string; ];
+  ];
+
+  ############################## seq, ss & stnd ##############################
+  # voc:sequence = {seq_1}
+  rr:predicateObjectMap [
+    rr:predicate voc:sequence;
+    rr:objectMap [ rr:column "seq_1"; rr:datatype xsd:string; ];
+  ];
+  # voc:ss_bond = {ss_bonds_v}
+  rr:predicateObjectMap [
+    rr:predicate voc:ss_bond;
+    rr:objectMap [ rr:column "ss_bonds_v"; rr:datatype xsd:string; ];
+  ];
+  # voc:post_trans_mod = {n_stnd_r_v}
+  rr:predicateObjectMap [
+    rr:predicate voc:post_trans_mod;
+    rr:objectMap [ rr:column "n_stnd_r_v"; rr:datatype xsd:string; ];
+  ];
+
+  ############################## References ##################################
+  # voc:spatial_structure_ref = {spat_pm__k}
+  rr:predicateObjectMap [
+    rr:predicate voc:spatial_structure_ref;
+    rr:objectMap [ rr:template "http://www.uniprot.org/uniprot/{spat_pm__k}" ];
+  ];
+  # voc:synthesis_ref = {synth_pm_k}
+  rr:predicateObjectMap [
+    rr:predicate voc:synthesis_ref;
+    rr:objectMap [ rr:template "http://www.uniprot.org/uniprot/{synth_pm_k}" ];
+  ];
+  # voc:ss-bond_ref = {ss_b_pm__v}
+  rr:predicateObjectMap [
+    rr:predicate voc:ss-bond_ref;
+    rr:objectMap [ rr:template "http://www.uniprot.org/uniprot/{ss_b_pm__v}" ];
+  ];
+  # voc:translation_ref = {n_std_pm_v}
+  rr:predicateObjectMap [
+    rr:predicate voc:translation_ref;
+    rr:objectMap [ rr:template "http://www.uniprot.org/uniprot/{n_std_pm_v}" ];
+  ].
