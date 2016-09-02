@@ -1,12 +1,15 @@
 cd ..
 java -cp .:morph.jar:lib/* es.upm.fi.dia.oeg.morph.r2rml.rdb.engine.MorphRDBRunner references references.properties
 cd references
-grep -Ev 'resource:>|""\^\^' references.nt | sort -u > result.nt
+grep -Ev 'pubmed/>|resource:>|""\^\^' references.nt | sort -u > result.nt
 mv result.nt references.nt
 cat <<EOT >> references.nt
 <http://bio2rdf.org/erop_vocabulary:asd_reference> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Property> .
 <http://bio2rdf.org/erop_vocabulary:asd_reference> <http://www.w3.org/2000/01/rdf-schema#label> "Reference"^^<http://www.w3.org/2001/XMLSchema#string> .
-<http://bio2rdf.org/erop_vocabulary:asd_reference> <http://purl.org/dc/terms/description> "First aminoacid sequence determination reference"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://bio2rdf.org/erop_vocabulary:asd_reference> <http://purl.org/dc/terms/description> "First nucleotide sequence determination reference"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://bio2rdf.org/erop_vocabulary:nsd_reference> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Property> .
+<http://bio2rdf.org/erop_vocabulary:nsd_reference> <http://www.w3.org/2000/01/rdf-schema#label> "Reference"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://bio2rdf.org/erop_vocabulary:nsd_reference> <http://purl.org/dc/terms/description> "First aminoacid sequence determination reference"^^<http://www.w3.org/2001/XMLSchema#string> .
 <http://bio2rdf.org/erop_vocabulary:title> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Property> .
 <http://bio2rdf.org/erop_vocabulary:title> <http://www.w3.org/2000/01/rdf-schema#label> "Title"^^<http://www.w3.org/2001/XMLSchema#string> .
 <http://bio2rdf.org/erop_vocabulary:title> <http://purl.org/dc/terms/description> "Reference title"^^<http://www.w3.org/2001/XMLSchema#string> .

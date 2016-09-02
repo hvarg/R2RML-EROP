@@ -60,4 +60,8 @@
   rr:predicateObjectMap [
     rr:predicate rdf:type;
     rr:object res:Function;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label;
+    rr:objectMap [ rr:column "function"; rr:datatype xsd:string; ];
   ].

@@ -112,7 +112,7 @@
   ];
   rr:predicateObjectMap [
     rr:predicate rdf:type;
-    rr:object res:FASDReference;
+    rr:object voc:InternalReference;
   ].
 
 <TriplesMap3>
@@ -171,5 +171,5 @@
   ];
   rr:predicateObjectMap [
     rr:predicate rdf:type;
-    rr:object res:FANDReference;
+    rr:object voc:InternalReference;
   ].
