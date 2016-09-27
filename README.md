@@ -3,7 +3,8 @@ A R2RML map from Erop SQL database (http://erop.inbi.ras.ru/) to RDF.
 
 We want to include the dataset into Bio2RDF project.
 
-The next table presents the map between the current Erop SQL database and RDF.
+The next table presents the current data in Erop database and where you can find
+the mapping.
 
 | Name         | Details                              | New type  | Note                     |
 | ------------ | ------------------------------------ | --------- | -------------------------|
@@ -82,11 +83,66 @@ The next table presents the map between the current Erop SQL database and RDF.
 
 **FNSDR:** First Nucleotide Sequence Determination Reference.
 
-## Domains
-**Karyote:** `Eukaryota`, `Akaryota`, `Pro(k|c)aryota`
+## Map
 
-**Kingdom:** `Animalia`, `Viridae`, `Bacteria`, `Plantae`, `Fungi`, `Cyanobacteria`
+Some prefix:
+```sparql
+PREFIX pep:     <http://bio2rdf.org/erop:> .
+PREFIX voc:     <http://bio2rdf.org/erop_vocabulary:> .
+PREFIX res:     <http://bio2rdf.org/erop_resource:> .
+```
 
-**Phylum:** `Algae`, `Annelida`, `Arthropoda`, `Arthropodan`, `Ascomycota`, `Basidiomycota`, `Bryophyta`, `Chlorophyta`, `Chordata`, `Cnidaria`, `Cyanobacteria`, `Echinodermata`, `Eubacteria`, `Halobacteriales`, `Mollicutes`, `Mollusca`, `Mucoromycotina`, `Nematoda`, `Platyhelminthes`, `Porifera`, `Protista`, `Protochordata`, `Protozoa`, `Spermatophyta`, `Zygomycota`, `dsDNA-containing virus`, `ssRNA-containing virus`
+All resources with the type `owl:DatatypeProperty` or `owl:ObjectProperty` are
+`rdf:Property` too.
 
-**Class:**  `Adenoviridae`, `Agaricomycetidae`, `Alariaceae`, `Amphibia`, `Angiospermae`, `Anthozoa`, `Arachnida`, `Ascidiacea`, `Asteroidea`, `Aves`, `Bacillariophita`, `Baculoviridae`, `Bivalva`, `Branchiostomidae`, `Bryopsida`, `Cactaceae`, `Caphalopoda`, `Caudovirales`, `Caudoviridae`, `Cephalopoda`, `Cestoda`, `Chlorophyta`, `Ciliophora`, `Crustacea`, `Demospongiae`, `Dothideomycetes`, `Echinoidea`, `Entamoeba`, `Eurotiomycetes`, `Gastropoda`, `Gram-negative bacteri(a|um)`, `Gram-positive bacterium`, `Halobacteriacae`, `Hirudinea`, `Holothuroidea`, `Hordeiviridae`, `Hydrozoa`, `Hymenomycetes`, `Insecta`, `Mammalia`, `(Mollusca|mollusk)`, `Myoviridae`, `Oligochaeta`, `Orthomyxoviridae`, `Paramyxoviridae`, `Philariasis`, `Phytoplasma`, `Pisces`, `Polychaeta`, `Reptilia`, `Retroviridae`, `Saccharomycetes`, `Schizosaccharomycetes`, `Scyphozoa`, `Secernentea`, `Sequiviridae`, `Sordariomycetes`, `Trematoda`, `Turbellaria`, `Urediniomycetes`, `Ustilaginomycetes`, `Zygomycets`
+| Name         | New name                             | RDF Type (Relation)      | RDF Type (Value) |
+| ------------ | ------------------------------------ | -------------------------| -----------------|
+| `erop_nmb_k` | `pep:{erop_nmb_k}` main resource     |       |  `voc:Resource`, `voc:Oligopeptide` |
+| `date_____k` | `voc:creation_date`                  | `owl:DatatypeProperty` | `xsd:date` |
+| `date_m___k` | `voc:modification_date`              | `owl:DatatypeProperty` | `xsd:date` |
+| `fam_nmb__k` | `voc:family_number`                  | `owl:DatatypeProperty` | `xsd:integer` |
+| `fam_name_k` | `voc:family_name`                    | `owl:DatatypeProperty` | `xsd:string` |
+| `pep_nmb__k` | `voc:pep_number`                     | `owl:DatatypeProperty` | `xsd:integer` |
+| `pep_name_k` | `voc:pep_name`                       | `owl:DatatypeProperty` | `xsd:string` |
+| `species__k` | `voc:source_organism`                | `owl:DatatypeProperty` | `xsd:string` |
+| `all_kar__k` | `voc:source_karyote`                 | `owl:ObjectProperty`   | `voc:Karyote` |
+| `all_kgd__k` | `voc:source_kingdom`                 | `owl:ObjectProperty`   | `voc:Kingdom` |
+| `all_phyl_k` | `voc:source_phylum`                  | `owl:ObjectProperty`   | `voc:Phylum` |
+| `all_b_cl_k` | `voc:source_class`                   | `owl:ObjectProperty`   | `voc:Class` |
+| `all_tiss_k` | `voc:source_secreted`                | `owl:DatatypeProperty` | `xsd:string` |
+| `func_cl__k` | `voc:function_class`                 | `owl:ObjectProperty`   | `voc:Function` |
+| `function_k` | `voc:function`                       | `owl:DatatypeProperty` | `xsd:string` |
+| `aar_sum__k` | `voc:aminoacid_number`               | `owl:DatatypeProperty` | `xsd:float` | 
+| `tsr_sum__k` | `voc:radical_number`                 | `owl:DatatypeProperty` | `xsd:float` |
+| `m_w______k` | `voc:experimental_molecular_mass`    | `owl:DatatypeProperty` | `xsd:float` |
+| `m_w_c____k` | `voc:calculated_molecular_mass`      | `owl:DatatypeProperty` | `xsd:float` |
+| `pi_______k` | `voc:experimental_pI`                | `owl:DatatypeProperty` | `xsd:float` |
+| `pi_c_____k` | `voc:calculated_pI`                  | `owl:DatatypeProperty` | `xsd:float` | 
+| `content__k` | `voc:content`                        | `owl:DatatypeProperty` | `xsd:string` |
+| `seq_1____k` | `voc:sequence`                       | `owl:DatatypeProperty` | `xsd:string` |
+| `syn_name_v` | `voc:synonym`                        | `owl:DatatypeProperty` | `xsd:string` |
+| `part_of__v` | `voc:precursor`                      | `owl:DatatypeProperty` | `xsd:string` |
+| `taxon____v` | `voc:taxon`                          | `owl:DatatypeProperty` | `xsd:string` |
+| `ss_bonds_v` | `voc:ss-bond`                        | `owl:DatatypeProperty` | `xsd:string` |
+| `n_stnd_r_v` | `voc:post_trans_mod`                 | `owl:DatatypeProperty` | `xsd:string` |
+| `comments_v` | `voc:comments`                       | `owl:DatatypeProperty` | `xsd:string` |
+|              | `voc:reference`                      | `owl:ObjectProperty`, `voc:Reference` | | 
+| `ss_b_pm__v` | `voc:ss-bond_ref`                    | `owl:ObjectProperty`, `voc:Reference` |  `voc:ExternalReference` |
+| `spat_pm__k` | `voc:spatial_structure_ref`          | `owl:ObjectProperty`, `voc:Reference` | `voc:ExternalReference` |
+| `synth_pm_k` | `voc:synthesis_ref`                  | `owl:ObjectProperty`, `voc:Reference` | `voc:ExternalReference` |
+| `n_std_pm_v` | `voc:translation_ref`                | `owl:ObjectProperty`, `voc:Reference` |  `voc:ExternalReference` |
+|              |`res:{HASH(seq_ref{mlv|t_v|y_v+a_v})}`|  | `voc:InternalReference`, `voc:ASDReference` |
+| `seq_refa_v` | `voc:author`                         | `owl:DatatypeProperty` | `xsd:string` |
+| `seq_reft_v` | `voc:title`                          | `owl:DatatypeProperty` | `xsd:string` |
+| `seq_refj_v` | `voc:journal`                        | `owl:DatatypeProperty` | `xsd:string` |
+| `seq_refy_v` | `voc:year`                           | `owl:DatatypeProperty` | `xsd:string` |
+| `country__v` | `voc:country`                        | `owl:DatatypeProperty` | `xsd:string` |
+| `seq_refspv` |                                      | `owl:ObjectProperty`, `rdfs:seeAlso` | |
+| `seq_refmlv` |                                      | `owl:ObjectProperty`, `rdfs:seeAlso` | |
+|              |`res:{HASH(nuc_ref{mlv|t_v|y_v+a_v})}`|  | `voc:InternalReference`, `voc:NSDReference` |
+| `nuc_refa_v` | `voc:author`                         | `owl:DatatypeProperty` | `xsd:string` |
+| `nuc_reft_v` | `voc:title`                          | `owl:DatatypeProperty` | `xsd:string` |
+| `nuc_refj_v` | `voc:journal`                        | `owl:DatatypeProperty` | `xsd:string` |
+| `nuc_refy_v` | `voc:year`                           | `owl:DatatypeProperty` | `xsd:string` |
+| `nuc_refspv` |                                      | `owl:ObjectProperty`, `rdfs:seeAlso` | | 
+| `nuc_refmlv` |                                      | `owl:ObjectProperty`, `rdfs:seeAlso` | |
