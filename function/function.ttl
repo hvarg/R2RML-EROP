@@ -59,7 +59,7 @@
   ];
   rr:predicateObjectMap [
     rr:predicate rdf:type;
-    rr:object res:Function;
+    rr:object voc:Function;
   ];
   rr:predicateObjectMap [
     rr:predicate rdfs:label;

@@ -63,6 +63,10 @@
   rr:predicateObjectMap [
     rr:predicate voc:asd_reference;
     rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{id}" ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:reference;
+    rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{id}" ];
   ].
 
 <TriplesMap2>
@@ -112,7 +116,15 @@
   ];
   rr:predicateObjectMap [
     rr:predicate rdf:type;
+    rr:object voc:Reference;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdf:type;
     rr:object voc:InternalReference;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdf:type;
+    rr:object voc:ASDReference;
   ].
 
 <TriplesMap3>
@@ -125,6 +137,10 @@
   ];
   rr:predicateObjectMap [
     rr:predicate voc:nsd_reference;
+    rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{id}" ];
+  ];
+  rr:predicateObjectMap [
+    rr:predicate voc:reference;
     rr:objectMap [ rr:template "http://bio2rdf.org/erop_resource:{id}" ];
   ].
 
@@ -171,5 +187,13 @@
   ];
   rr:predicateObjectMap [
     rr:predicate rdf:type;
+    rr:object voc:Reference;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdf:type;
     rr:object voc:InternalReference;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdf:type;
+    rr:object voc:NSDReference;
   ].

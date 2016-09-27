@@ -5,8 +5,10 @@ cd date
 grep -Ev '0000-00-00|unidentified|resource:>|""\^\^' date.nt | sort -u > result.nt
 mv result.nt date.nt
 cat <<EOT >> date.nt
-<http://bio2rdf.org/erop_vocabulary:creation_date> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Property> .
+<http://bio2rdf.org/erop_vocabulary:creation_date> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+<http://bio2rdf.org/erop_vocabulary:creation_date> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
+<http://bio2rdf.org/erop_vocabulary:modification_date> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+<http://bio2rdf.org/erop_vocabulary:modification_date> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#DatatypeProperty> .
 <http://bio2rdf.org/erop_vocabulary:creation_date> <http://www.w3.org/2000/01/rdf-schema#label> "Creation date"^^<http://www.w3.org/2001/XMLSchema#string> .
-<http://bio2rdf.org/erop_vocabulary:modification_date> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Property> .
 <http://bio2rdf.org/erop_vocabulary:modification_date> <http://www.w3.org/2000/01/rdf-schema#label> "Modification date"^^<http://www.w3.org/2001/XMLSchema#string> .
 EOT

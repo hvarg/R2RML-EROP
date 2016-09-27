@@ -58,7 +58,7 @@
   ];
   rr:predicateObjectMap [
     rr:predicate rdf:type;
-    rr:object res:Karyote;
+    rr:object voc:Karyote;
   ];
   rr:predicateObjectMap [
     rr:predicate rdfs:label;

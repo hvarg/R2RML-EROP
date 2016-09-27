@@ -85,7 +85,7 @@
   # voc:aminoacid_number = {aar_sum__k}
   rr:predicateObjectMap [
     rr:predicate voc:aminoacid_number;
-    rr:objectMap [ rr:column "aar_sum__k"; rr:datatype xsd:integer; ];
+    rr:objectMap [ rr:column "aar_sum__k"; rr:datatype xsd:float; ];
   ];
   # voc:radical_number = {tsr_sum__k}
   rr:predicateObjectMap [
@@ -141,9 +141,9 @@
     rr:predicate voc:sequence;
     rr:objectMap [ rr:column "seq_1"; rr:datatype xsd:string; ];
   ];
-  # voc:ss_bond = {ss_bonds_v}
+  # voc:ss-bond = {ss_bonds_v}
   rr:predicateObjectMap [
-    rr:predicate voc:ss_bond;
+    rr:predicate voc:ss-bond;
     rr:objectMap [ rr:column "ss_bonds_v"; rr:datatype xsd:string; ];
   ];
   # voc:post_trans_mod = {n_stnd_r_v}
@@ -156,20 +156,58 @@
   # voc:spatial_structure_ref = {spat_pm__k}
   rr:predicateObjectMap [
     rr:predicate voc:spatial_structure_ref;
-    rr:objectMap [ rr:template "http://www.uniprot.org/uniprot/{spat_pm__k}" ];
+    rr:objectMap [ rr:template "http://bio2rdf.org/pubmed:{spat_pm__k}" ];
   ];
   # voc:synthesis_ref = {synth_pm_k}
   rr:predicateObjectMap [
     rr:predicate voc:synthesis_ref;
-    rr:objectMap [ rr:template "http://www.uniprot.org/uniprot/{synth_pm_k}" ];
+    rr:objectMap [ rr:template "http://bio2rdf.org/pubmed:{synth_pm_k}" ];
   ];
   # voc:ss-bond_ref = {ss_b_pm__v}
   rr:predicateObjectMap [
     rr:predicate voc:ss-bond_ref;
-    rr:objectMap [ rr:template "http://www.uniprot.org/uniprot/{ss_b_pm__v}" ];
+    rr:objectMap [ rr:template "http://bio2rdf.org/pubmed:{ss_b_pm__v}" ];
   ];
   # voc:translation_ref = {n_std_pm_v}
   rr:predicateObjectMap [
     rr:predicate voc:translation_ref;
-    rr:objectMap [ rr:template "http://www.uniprot.org/uniprot/{n_std_pm_v}" ];
+    rr:objectMap [ rr:template "http://bio2rdf.org/pubmed:{n_std_pm_v}" ];
+  ];
+  # voc:reference = {spat_pm__k}
+  rr:predicateObjectMap [
+    rr:predicate voc:reference;
+    rr:objectMap [ rr:template "http://bio2rdf.org/pubmed:{spat_pm__k}" ];
+  ];
+  # voc:reference = {synth_pm_k}
+  rr:predicateObjectMap [
+    rr:predicate voc:reference;
+    rr:objectMap [ rr:template "http://bio2rdf.org/pubmed:{synth_pm_k}" ];
+  ];
+  # voc:ss-reference = {ss_b_pm__v}
+  rr:predicateObjectMap [
+    rr:predicate voc:reference;
+    rr:objectMap [ rr:template "http://bio2rdf.org/pubmed:{ss_b_pm__v}" ];
+  ];
+  # voc:reference = {n_std_pm_v}
+  rr:predicateObjectMap [
+    rr:predicate voc:reference;
+    rr:objectMap [ rr:template "http://bio2rdf.org/pubmed:{n_std_pm_v}" ];
   ].
+
+<#pmid> rr:sqlQuery """
+SELECT DISTINCT TRIM(id) as ID FROM (
+  SELECT DISTINCT spat_pm__k AS id FROM erop UNION 
+  SELECT DISTINCT synth_pm_k AS id FROM erop UNION
+  SELECT DISTINCT ss_b_pm__v AS id FROM erop UNION
+  SELECT DISTINCT n_std_pm_v AS id FROM erop) AS pm WHERE id != '-';
+""".
+<TriplesMap2>
+  a rr:TriplesMap;
+  rr:logicalTable <#pmid>;
+  rr:subjectMap [
+    a rr:Subject;
+    rr:template "http://bio2rdf.org/pubmed:{ID}";
+    rr:termType rr:IRI;
+    rr:class voc:ExternalReference;
+    rr:class voc:Reference;
+  ] .

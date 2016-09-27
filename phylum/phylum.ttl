@@ -64,7 +64,7 @@
   ];
   rr:predicateObjectMap [
     rr:predicate rdf:type;
-    rr:object res:Phylum;
+    rr:object voc:Phylum;
   ];
   rr:predicateObjectMap [
     rr:predicate rdfs:label;

@@ -64,7 +64,7 @@
   ];
   rr:predicateObjectMap [
     rr:predicate rdf:type;
-    rr:object res:Class;
+    rr:object voc:Class;
   ];
   rr:predicateObjectMap [
     rr:predicate rdfs:label;

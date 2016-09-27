@@ -58,7 +58,7 @@
   ];
   rr:predicateObjectMap [
     rr:predicate rdf:type;
-    rr:object res:Kingdom;
+    rr:object voc:Kingdom;
   ];
   rr:predicateObjectMap [
     rr:predicate rdfs:label;
