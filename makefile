@@ -5,7 +5,7 @@ all: main class date function karyote kingdom phylum references split
 
 main: main.ttl
 	java -cp .:morph.jar:lib/* es.upm.fi.dia.oeg.morph.r2rml.rdb.engine.MorphRDBRunner . main.properties
-	grep -vE 'unknown|""\^\^|pubmed:>|unidentified|"-"|"none"|resources:>|uniprot/>' main.nt | sort -u > result.nt
+	grep -vE ':->|unknown|""\^\^|pubmed:>|unidentified|"-"|"none"|resources:>|uniprot/>' main.nt | sort -u > result.nt
 	cat result.nt labels.nt > main.nt
 	rm result.nt
 

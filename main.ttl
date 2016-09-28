@@ -208,6 +208,12 @@ SELECT DISTINCT TRIM(id) as ID FROM (
     a rr:Subject;
     rr:template "http://bio2rdf.org/pubmed:{ID}";
     rr:termType rr:IRI;
-    rr:class voc:ExternalReference;
-    rr:class voc:Reference;
-  ] .
+  ] ;
+  rr:predicateObjectMap [
+    rr:predicate rdf:type;
+    rr:object voc:ExternalReference;
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdf:type;
+    rr:object voc:Reference;
+  ].
