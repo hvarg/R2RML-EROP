@@ -9,7 +9,7 @@ the mapping.
 | Name         | Details                              | New type  | Note                     |
 | ------------ | ------------------------------------ | --------- | -------------------------|
 | `row_id`     | Row's ID                             | `NULL`    | Skip (Useless)           |
-| `erop_nmb_k` | EROP accession                       | `URI`     | Main resource            |
+| `erop_nmb_k` | EROP accession                       | `URI`     | Main resource, `E\d{5,6}`|
 | `date_____k` | Creation date                        | `date`    | `%d.%m.%Y` -> `%Y-%m-%d` |
 | `date_m___k` | Modification date                    | `date`    | `%d.%m.%Y` -> `%Y-%m-%d` |
 | `fam_nmb__k` | [FASD] Structural family number      | `decimal` |                          |
@@ -95,9 +95,12 @@ PREFIX res:     <http://bio2rdf.org/erop_resource:> .
 All resources with the type `owl:DatatypeProperty` or `owl:ObjectProperty` are
 `rdf:Property` too.
 
+All reference relations (internal or external) are `voc:reference` too.
+
+
 | Name         | New name                             | RDF Type (Relation)    | RDF Type (Value)                      |
 | ------------ | ------------------------------------ | -----------------------| ------------------------------------- |
-| `erop_nmb_k` | `pep:{erop_nmb_k}` main resource     |                        |  `voc:Resource`, `voc:Oligopeptide`   |
+| `erop_nmb_k` | `pep:{erop_nmb_k}` (main resource)   |                        |  `voc:Resource`, `voc:Oligopeptide`   |
 | `date_____k` | `voc:creation_date`                  | `owl:DatatypeProperty` | `xsd:date`                            |
 | `date_m___k` | `voc:modification_date`              | `owl:DatatypeProperty` | `xsd:date`                            |
 | `fam_nmb__k` | `voc:family_number`                  | `owl:DatatypeProperty` | `xsd:integer`                         |
@@ -126,11 +129,11 @@ All resources with the type `owl:DatatypeProperty` or `owl:ObjectProperty` are
 | `ss_bonds_v` | `voc:ss-bond`                        | `owl:DatatypeProperty` | `xsd:string`                          |
 | `n_stnd_r_v` | `voc:post_trans_mod`                 | `owl:DatatypeProperty` | `xsd:string`                          |
 | `comments_v` | `voc:comments`                       | `owl:DatatypeProperty` | `xsd:string`                          |
-|              | `voc:reference`                      | `owl:ObjectProperty`, `voc:Reference` |                        |
-| `ss_b_pm__v` | `voc:ss-bond_ref`                    | `owl:ObjectProperty`, `voc:Reference` |`voc:ExternalReference` |
-| `spat_pm__k` | `voc:spatial_structure_ref`          | `owl:ObjectProperty`, `voc:Reference` |`voc:ExternalReference` |
-| `synth_pm_k` | `voc:synthesis_ref`                  | `owl:ObjectProperty`, `voc:Reference` |`voc:ExternalReference` |
-| `n_std_pm_v` | `voc:translation_ref`                | `owl:ObjectProperty`, `voc:Reference` |`voc:ExternalReference` |
+|              | `voc:reference`                      | `owl:ObjectProperty`   | `voc:Reference`                       |
+| `ss_b_pm__v` | `voc:ss-bond_ref`                    | `owl:ObjectProperty`   | `voc:ExternalReference`               |
+| `spat_pm__k` | `voc:spatial_structure_ref`          | `owl:ObjectProperty`   | `voc:ExternalReference`               |
+| `synth_pm_k` | `voc:synthesis_ref`                  | `owl:ObjectProperty`   | `voc:ExternalReference`               |
+| `n_std_pm_v` | `voc:translation_ref`                | `owl:ObjectProperty`   | `voc:ExternalReference`               |
 |              |`res:{HASH(seq_ref{mlv|t_v|y_v+a_v})}`|                  | `voc:InternalReference`, `voc:ASDReference` |
 | `seq_refa_v` | `voc:author`                         | `owl:DatatypeProperty` | `xsd:string`                          |
 | `seq_reft_v` | `voc:title`                          | `owl:DatatypeProperty` | `xsd:string`                          |
