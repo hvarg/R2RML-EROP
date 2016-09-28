@@ -3,7 +3,9 @@ java -cp .:morph.jar:lib/* es.upm.fi.dia.oeg.morph.r2rml.rdb.engine.MorphRDBRunn
 cd class
 sed -i -e 's/%20Gram/Gram/g' class.nt
 sed -i -e 's/tivebacte/tive bacte/g' class.nt
-grep -Ev 'ibsect|)insect|insrct|unidentified|resource:>|""\^\^' class.nt | sort -u > result.nt
+sed -i -e 's/bacteria>/bacterium>/g' class.nt
+sed -i -e 's/teria"/terium">/g' class.nt
+grep -Ev '\)id|turbellaria |phasmidroudnworm|alia\) \(Mam|reptilia |amphubian|ibsect|\)insect|insrct|unidentified|resource:>|""\^\^' class.nt | sort -u > result.nt
 mv result.nt class.nt
 cat <<EOT >> class.nt
 <http://bio2rdf.org/erop_vocabulary:source_class> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
